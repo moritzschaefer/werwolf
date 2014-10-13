@@ -18,12 +18,18 @@ Game.register(function(app, auth, database) {
 
   //We are adding a link to the main menu for all authenticated users
   Game.menus.add({
-    title: 'game example page',
-    link: 'game example page',
+    title: 'Games',
+    link: 'games',
     roles: ['authenticated'],
     menu: 'main'
   });
-  
+  Game.menus.add({
+    title: 'Create game',
+    link: 'create game',
+    roles: ['authenticated'],
+    menu: 'main'
+  });
+
   Game.aggregateAsset('css', 'game.css');
 
   /**

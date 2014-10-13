@@ -1,27 +1,18 @@
-<div class="" data-ng-controller="GameController">
-  <h1>Example view from your new awesome package</h1>
-  <h2>Package: {{package.name}}</h2>
-  <ol>
-    <li>
-      <a href="game/example/anyone">Server route that anyone can access</a>
+<section data-ng-controller="GameController" data-ng-init="find()">
+  <ul class="games unstyled">
+    <li data-ng-repeat="game in games">
+      <span>{{game.created | date:'medium'}}</span> /
+      <span>{{game.hostuser.name}}</span>
+      <h2>
+        <a data-ng-href="#!/games/{{game._id}}">{{game.title}}</a>
+        <span class="game-state">{{game.state}}</span>
+        <span data-ng-if="hasAuthorization(game)">
+          <a class="btn" data-ng-click="remove(game);">
+            <i class="glyphicon glyphicon-trash"></i>
+          </a>
+        </span>
+      </h2>
     </li>
-    <li>
-      <a href="game/example/auth">Server route that requires authentication</a>
-    </li>
-    <li>
-      <a href="game/example/admin">Server route that requires admin user</a>
-    </li>
-    <li>
-      <a href="game/example/render">Raw Html rendering example from using swig</a>
-    </li>
-  </ol>
-  <h3><img src="/game/assets/img/logo.png" /></h3>
-  </br>
-  <p class="alert alert-info">You can find your package in /packages/game</p>
-  </br>
-  <p class="alert alert-warning">MEAN versions prior to 0.3.2 will be in /node_modules/game</p>
-  </br>
-  <h3><a href="http://www.mean.io/#!/docs">Documentation</a></h3>
-  </br>
-</div>
-
+  </ul>
+  <h1 data-ng-hide="!games || games.length">Games <br> Why don't you <a href="/#!/games/create">Create One</a>?</h1>
+</section>

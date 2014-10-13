@@ -1,0 +1,11 @@
+<section data-ng-controller="GameController" data-ng-init="findOne()">
+  <span>{{game.created | date:'medium'}}</span> /
+  <span>{{game.hostuser.name}}</span>
+  <h2>{{game.title}}</h2>
+  <div data-ng-if="hasAuthorization(game)">
+    <a class="btn" data-ng-click="remove(game);">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <div>{{game.state}}</div>
+</section>

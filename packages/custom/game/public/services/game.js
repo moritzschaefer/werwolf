@@ -1,9 +1,14 @@
 'use strict';
 
-angular.module('mean.game').factory('Game', [
-  function() {
-    return {
-      name: 'game'
-    };
+//Games service used for games REST endpoint
+angular.module('mean.game').factory('Game', ['$resource',
+  function($resource) {
+    return $resource('games/:gameId', {
+      gameId: '@_id'
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    });
   }
 ]);
