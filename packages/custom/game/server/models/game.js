@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    User = mongoose.model('User'),
   Schema = mongoose.Schema;
 
 var GameCharacterSchema = new Schema({
@@ -55,7 +56,15 @@ GameSchema.path('title').validate(function(title) {
 GameSchema.statics.load = function(id, cb) {
   this.findOne({
     _id: id
-  }).populate('hostuser participants').exec(cb);
+  }).populate('hostuser participants').exec(function(err,data) {
+    var options = {
+      path: 'participants.user',
+      model: 'User'
+    };
+
+    if (err) return null;
+        User.populate(data, options, cb);
+  });
 };
 
 mongoose.model('GameCharacter', GameCharacterSchema);

@@ -8,4 +8,12 @@
     </a>
   </div>
   <div>{{game.state}}</div>
+  <div>
+      <ul>
+          <li data-ng-repeat="participant in game.participants">
+              <span class="name" data-ng-bind="participant.user.name"></span>
+              <span class="dead" data-ng-hide="participant.alive">DEAD</span>
+          </li>
+      </ul>
+  </div>
 </section>
