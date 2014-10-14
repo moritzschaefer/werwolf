@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
   Game = mongoose.model('Game'),
+  GameCharacter = mongoose.model('GameCharacter'),
   _ = require('lodash');
 
 
@@ -27,18 +28,33 @@ exports.create = function(req, res) {
   var game = new Game(req.body);
   game.hostuser = req.user;
   game.state = 'pre';
-  // create new participant and add
-  //game.participants.add
 
   game.save(function(err) {
     if (err) {
       return res.json(500, {
-        error: 'Cannot save the game'
+        error: 'Cannot save the game: ' + err
       });
     }
-    res.json(game);
+    // create new participant and add
+    var character = new GameCharacter({user: req.user, _game: game._id});
+    character.save(function(err) {
+        if(err) {
+            return res.json(500, {
+                    error: 'Cannot save the game: Cannot add game to gamecharacter: ' + err
+            });
+        }
+        game.participants.push(character);
+        game.save(function(err) {
+            if(err) {
+                return res.json(500, {
+                        error: 'Cannot save the game: Cannot add user to participants: ' + err
+                });
+            }
 
-  });
+            res.json(game);
+            });
+        });
+    });
 };
 
 /**

@@ -11,8 +11,9 @@ var GameCharacterSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
+  _game: {type: Schema.Types.ObjectId, ref: 'Game'},
   character: String,
-  alive: Boolean
+  alive: {type: Boolean, default: true}
 });
 
 /**
@@ -38,8 +39,7 @@ var GameSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
-  participants : [GameCharacterSchema]
-  // participants : [{ type: Schema.Types.ObjectId, ref: 'User' }]
+  participants : [{ type: Schema.Types.ObjectId, ref: 'GameCharacter' }]
 });
 
 /**
@@ -55,7 +55,8 @@ GameSchema.path('title').validate(function(title) {
 GameSchema.statics.load = function(id, cb) {
   this.findOne({
     _id: id
-  }).populate('hostuser', 'name username').exec(cb);
+  }).populate('hostuser participants').exec(cb);
 };
 
+mongoose.model('GameCharacter', GameCharacterSchema);
 mongoose.model('Game', GameSchema);
