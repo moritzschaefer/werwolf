@@ -27,9 +27,9 @@ angular.module('mean.game').config(['$stateProvider',
     .state('create game', {
       url: '/games/create',
       templateUrl: 'game/views/create.html',
-      /*resolve: {
+      resolve: {
         loggedin: checkLoggedin
-      }*/
+      }
     })
     .state('game by id', {
       url: '/games/:gameId',
