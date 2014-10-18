@@ -95,12 +95,13 @@ GameSchema.methods.addCharacter = function(user, cb) {
     // create new participant and add
 
     var GameCharacter = mongoose.model('GameCharacter');
-    var character = new GameCharacter({user: user, _game: this._id});
+    var character = new GameCharacter({user: user, _game: this._id, character: 'citizen'});
 
     character.save(function(err) {
         if(err) {
             return cb(err);
         }
+
         this.participants.push(character);
         this.save(function(err) {
             if(err) {

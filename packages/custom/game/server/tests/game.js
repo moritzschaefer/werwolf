@@ -89,19 +89,26 @@
              password: 'password'
          });
 
-         user.save(function() {
+         user.save(function(err) {
            gameCharacter = new GameCharacter({
                character: 'citizen',
                user: user
            });
-           gameCharacter.save();
-           // now create game
-           game = new Game({
-               title: 'game title',
-               hostuser: user
+           gameCharacter.save(function(err) {
+             // now create game
+             game = new Game({
+                 title: 'game title',
+                 hostuser: user
+             });
+             done();
            });
-           done();
          });
+       });
+       afterEach(function(done) {
+         gameCharacter.remove();
+         game.remove();
+         user.remove();
+         done();
        });
        describe('Method Save', function() {
          it('should be able to save without problems', function(done) {
@@ -110,6 +117,35 @@
              game.title.should.equal('game title');
              game.state.should.equal('pre');
              done();
+           });
+         });
+       });
+       describe('Static load', function() {
+         it('should find the correct object', function(done) {
+           return game.save(function(err) {
+             should.not.exist(err);
+             return Game.load(game._id, function(err, foundGame) {
+               should.not.exist(err);
+               // ids must match
+               game._id.toString().should.equal(foundGame._id.toString());
+               // loaded/populated values
+               foundGame.hostuser.name.should.equal(user.name);
+               foundGame.participants[0].user.name.should.equal(user.name);
+             });
+           });
+
+         });
+       });
+       describe('Add participant', function() {
+         it('should add a user to the participant list', function(done) {
+           return game.save(function(err) {
+             game.addCharacter(user, function(err) {
+               should.not.exist(err);
+               return Game.load(game._id, function(err, foundGame) {
+                 should.not.exist(err);
+                 foundGame.participants[0].user.name.should.equal(user.name);
+               });
+             });
            });
          });
        });
