@@ -7,15 +7,29 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User'),
   Schema = mongoose.Schema;
 
+var characters = 'werewolf citizen witch girl hunter god cupid seer'.split(' ');
 var GameCharacterSchema = new Schema({
   user: {
     type: Schema.ObjectId,
     ref: 'User'
   },
   _game: {type: Schema.Types.ObjectId, ref: 'Game'},
-  character: String,
+  character: {
+      type: String,
+      required: true,
+      enum: characters
+  }
   alive: {type: Boolean, default: true}
 });
+
+/**
+ * Statics
+ */
+GameCharacterSchema.statics.findWithUser = function(user, cb) {
+    this.findOne({
+            user: user
+    });
+}
 
 /**
  * Game Schema
@@ -33,6 +47,7 @@ var GameSchema = new Schema({
   },
   state: { // The game state
     type: String,
+    default: 'pre',
     required: true,
     enum: gameStates
   },
@@ -66,6 +81,35 @@ GameSchema.statics.load = function(id, cb) {
         User.populate(data, options, cb);
   });
 };
+
+/**
+ * methods
+ */
+
+GameSchema.methods.addCharacter = function(user, cb) {
+    // create new participant and add
+    var character = new GameCharacter({user: user, _game: this._id});
+
+    character.save(function(err) {
+        if(err) {
+            return cb(err);
+        }
+        this.participants.push(character);
+        this.save(function(err) {
+            if(err) {
+                return cb(err);
+            }
+            cb(null);
+        });
+    });
+};
+
+GameSchema.methods.detailsForUser = function(user, cb) {
+    // find character first
+}
+GameSchema.methods.detailsForCharacter = function(user, cb) {
+    // find character first
+}
 
 mongoose.model('GameCharacter', GameCharacterSchema);
 mongoose.model('Game', GameSchema);
