@@ -18,8 +18,12 @@ var GameCharacterSchema = new Schema({
       type: String,
       required: true,
       enum: characters
-  }
-  alive: {type: Boolean, default: true}
+  },
+  alive: {
+      type: Boolean,
+        default: true
+    }
+
 });
 
 /**
