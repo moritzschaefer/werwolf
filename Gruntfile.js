@@ -17,10 +17,33 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     assets: grunt.file.readJSON('config/assets.json'),
     clean: ['bower_components/build'],
+    watchTest: {
+      js: {
+        files: paths.js,
+        tasks: ['jshint', 'env:test', 'mochaTest', 'karma:unit'],
+        options: {
+          livereload: true
+        }
+      },
+      html: {
+        files: paths.html,
+        options: {
+          livereload: true,
+          interval: 500
+        }
+      },
+      css: {
+        files: paths.css,
+        tasks: ['csslint'],
+        options: {
+          livereload: true
+        }
+      }
+    },
     watch: {
       js: {
         files: paths.js,
-        tasks: ['jshint'],
+        tasks: ['jshint', 'env:test', 'mochaTest', 'karma:unit'],
         options: {
           livereload: true
         }

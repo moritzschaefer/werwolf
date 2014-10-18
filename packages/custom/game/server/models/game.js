@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+
   Schema = mongoose.Schema;
 
 var characters = 'werewolf citizen witch girl hunter god cupid seer'.split(' ');
@@ -28,11 +29,11 @@ var GameCharacterSchema = new Schema({
 /**
  * Statics
  */
-GameCharacterSchema.statics.findWithUser = function(user, cb) {
+GameCharacterSchema.statics.findByUser = function(user, cb) {
     this.findOne({
             user: user
-    });
-}
+    }, cb);
+};
 
 /**
  * Game Schema
@@ -72,6 +73,7 @@ GameSchema.path('title').validate(function(title) {
  * Statics
  */
 GameSchema.statics.load = function(id, cb) {
+    var User = mongoose.model('User');
   this.findOne({
     _id: id
   }).populate('hostuser participants').exec(function(err,data) {
@@ -81,7 +83,7 @@ GameSchema.statics.load = function(id, cb) {
     };
 
     if (err) return null;
-        User.populate(data, options, cb);
+    User.populate(data, options, cb);
   });
 };
 
@@ -91,6 +93,8 @@ GameSchema.statics.load = function(id, cb) {
 
 GameSchema.methods.addCharacter = function(user, cb) {
     // create new participant and add
+
+    var GameCharacter = mongoose.model('GameCharacter');
     var character = new GameCharacter({user: user, _game: this._id});
 
     character.save(function(err) {
@@ -109,10 +113,10 @@ GameSchema.methods.addCharacter = function(user, cb) {
 
 GameSchema.methods.detailsForUser = function(user, cb) {
     // find character first
-}
+};
 GameSchema.methods.detailsForCharacter = function(user, cb) {
     // find character first
-}
+};
 
 mongoose.model('GameCharacter', GameCharacterSchema);
 mongoose.model('Game', GameSchema);

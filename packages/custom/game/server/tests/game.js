@@ -59,6 +59,19 @@
          });
 
        });
+       describe('Statics', function() {
+         it('should be possible to find a character by user', function(done) {
+           gameCharacter.save(function(err) {
+             // save is checked before..
+             return GameCharacter.findByUser(user, function(err, character) {
+                should.not.exist(err);
+                character._id.toString().should.equal(gameCharacter._id.toString());
+                done();
+             });
+
+           });
+         });
+       });
 
 
        afterEach(function(done) {

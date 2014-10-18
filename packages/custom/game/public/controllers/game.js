@@ -41,7 +41,8 @@ angular.module('mean.game').controller('GameController', ['$scope', '$location',
     };
     $scope.addParticipant = function() {
         $scope.findOne();
-        Game.update({id: game.id}, {});
+
+        Game.update({id: $stateParams.gameId}, {});
     };
     $scope.find = function() {
       Game.query(function(games) {

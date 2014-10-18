@@ -5,7 +5,7 @@
  */
 var mongoose = require('mongoose'),
   Game = mongoose.model('Game'),
-  GameCharacter = mongoose.model('GameCharacter'),
+  //GameCharacter = mongoose.model('GameCharacter'),
   _ = require('lodash');
 
 
