@@ -4,7 +4,6 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    User = mongoose.model('User'),
   Schema = mongoose.Schema;
 
 var characters = 'werewolf citizen witch girl hunter god cupid seer'.split(' ');
